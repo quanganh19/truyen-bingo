@@ -5,3 +5,11 @@
 :where(.css-dev-only-do-not-override-1me4733).ant-btn-primary{
     background-color: #1677ff !important;
 }
+
+.ant-btn-primary {
+    background-color: #1677ff !important;
+}
+
+.ant-modal-confirm-content {
+    max-width: unset !important;
+}

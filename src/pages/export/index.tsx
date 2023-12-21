@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Table, Input, Button, Upload } from "antd";
+import { Table, Input, Button, Upload, Modal } from "antd";
 const ECO_VALUE = "E";
 
 const Export = () => {
@@ -47,14 +47,10 @@ const Export = () => {
     setData(dataDefault);
   };
 
-  console.log("listData", listData);
-
   const downloadJsonFile = (data, filename) => {
     const blob = new Blob([JSON.stringify(data, null, 2)], {
       type: "application/json",
     });
-    console.log("filename", filename);
-
     const href = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = href;
@@ -87,6 +83,54 @@ const Export = () => {
   const handleDelete = (index) => {
     const newListData = listData?.filter((x, idx) => idx !== index);
     setListData(newListData);
+  };
+
+  const { confirm } = Modal;
+
+  const handleEdit = (index) => {
+    const editData = listData?.find((x, idx) => idx === index);
+    confirm({
+        icon: null,
+      title: `Chỉnh sửa Bingo ${index + 1}`,
+      content: (
+        <Table
+          showHeader={false}
+          key={index}
+          dataSource={editData?.map((data, idx) => ({
+            key: idx,
+            name: data,
+          }))}
+          columns={editData.map((_, colIndex) => ({
+            dataIndex: colIndex,
+            key: colIndex,
+            render: (_, record, rowIndex) => {
+              const isMiddleCell = rowIndex === 2 && colIndex === 2;
+              if (isMiddleCell) {
+                return (
+                  <span className="flex w-full bg-red-600 text-white justify-center">
+                    {ECO_VALUE}
+                  </span>
+                );
+              }
+              return (
+                <div className="flex justify-center">
+                  {editData[rowIndex][colIndex]}
+                </div>
+              );
+            },
+          }))}
+          pagination={false}
+          bordered
+          size="small"
+        />
+      ),
+      onOk() {
+        console.log("OK");
+      },
+      onCancel() {
+        console.log("Cancel");
+      },
+    });
   };
 
   return (
@@ -145,21 +189,29 @@ const Export = () => {
         {listData?.map((ele, idx) => (
           <div key={idx}>
             <div className="flex flex-row justify-between items-center">
-              <span className="flex justify-center text-xl mb-1 grow">{`Bingo ${
+              <span className="flex text-xl mb-1 grow">{`Bingo ${
                 idx + 1
               }`}</span>
-              <span
-                className="text-red-900 cursor-pointer text-xs"
-                onClick={() => handleDelete(idx)}
-              >
-                Xóa
-              </span>
+              <div className="flex flex-row items-center gap-2">
+                <span
+                  className="text-blue-600 cursor-pointer text-xs"
+                  onClick={() => handleEdit(idx)}
+                >
+                  Sửa
+                </span>
+                <span
+                  className="text-red-600 cursor-pointer text-xs"
+                  onClick={() => handleDelete(idx)}
+                >
+                  Xóa
+                </span>
+              </div>
             </div>
             <Table
               showHeader={false}
               key={idx}
-              dataSource={ele?.map((data) => ({
-                key: idx,
+              dataSource={ele?.map((data, eleIdx) => ({
+                key: eleIdx,
                 name: data,
               }))}
               columns={ele.map((_, colIndex) => ({

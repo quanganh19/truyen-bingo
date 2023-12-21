@@ -128,8 +128,8 @@ const InputTable = () => {
             <Table
               showHeader={false}
               key={idx}
-              dataSource={ele?.map((data) => ({
-                key: idx,
+              dataSource={ele?.map((data, eleIdx) => ({
+                key: eleIdx,
                 name: data,
               }))}
               columns={ele.map((_, colIndex) => ({

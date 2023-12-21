@@ -113,7 +113,7 @@ const InputTable = () => {
         Tìm kiếm
       </Button>
       <div className="flex flex-row items-center justify-between">
-        <div className="mt-2 text-lg mb-2">{`Kết quả: ${listData?.length}/${
+        <div className="mt-2 text-lg mb-2">{`Kết quả: ${listData?.length || 0}/${
           listDataDefault?.current?.length || 0
         }`}</div>
         <Button

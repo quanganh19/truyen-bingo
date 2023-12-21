@@ -78,7 +78,9 @@ const InputTable = () => {
   return (
     <div className="mx-4">
       <div>
-        <div className="mb-1 mt-2">Tải file json:</div>
+        <div className="mb-1 mt-2">
+          Tải file json: (Chưa có thì export tại <a className="text-blue-500 underline" href="/export">đây</a>)
+        </div>
         <Upload
           beforeUpload={(file) => {
             handleFileChosen(file);

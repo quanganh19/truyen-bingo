@@ -79,7 +79,11 @@ const InputTable = () => {
     <div className="mx-4">
       <div>
         <div className="mb-1 mt-2">
-          Tải file json: (Chưa có thì export tại <a className="text-blue-500 underline" href="/export">đây</a>)
+          Tải file json: (Chưa có thì export tại{" "}
+          <a className="text-blue-500 underline" href="/export">
+            đây
+          </a>
+          )
         </div>
         <Upload
           beforeUpload={(file) => {
@@ -123,7 +127,9 @@ const InputTable = () => {
         {listData?.map((ele, idx) => (
           <div>
             <span className="flex justify-center text-xl mb-1 font-bold">{`Bingo ${
-              idx + 1
+              listDataDefault.current?.findIndex(
+                (x) => JSON.stringify(x) === JSON.stringify(ele)
+              ) + 1
             }`}</span>
             <Table
               showHeader={false}

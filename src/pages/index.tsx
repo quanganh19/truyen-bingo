@@ -17,8 +17,6 @@ const InputTable = () => {
   const [listData, setListData] = useState<any>([]);
   const [valueInput, setValueInput] = useState<any>("");
 
-  console.log("listData", listData);
-
   const handleChangeBingoNumber = (e) => {
     if (!e.target.value?.trim()) {
       setListData(listDataDefault.current);
@@ -122,7 +120,7 @@ const InputTable = () => {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 items-center">
         {listData?.map((ele, idx) => (
           <div>
-            <span className="flex justify-center text-xl mb-1">{`Bingo ${
+            <span className="flex justify-center text-xl mb-1 font-bold">{`Bingo ${
               idx + 1
             }`}</span>
             <Table

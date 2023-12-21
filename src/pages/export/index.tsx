@@ -1,18 +1,29 @@
 import React, { useState, useRef } from "react";
-import { Table, Input, Button, Upload, Modal } from "antd";
+import { Table, Input, Button, Upload, Modal, Form } from "antd";
+import cloneDeep from "lodash/cloneDeep";
 const ECO_VALUE = "E";
 
 const Export = () => {
+  const { confirm } = Modal;
+  const [form] = Form.useForm();
+
   const listDataDefault = useRef(null);
   const dataDefault = [...Array(5)].map(() => Array(5).fill(""));
   const [data, setData] = useState(dataDefault);
   const [listData, setListData] = useState<any>(listDataDefault.current || []);
   const [valueInput, setValueInput] = useState<any>("");
+  const [dataEdit, setDataEdit] = useState([]);
 
   const handleInputChange = (value, rowIndex, colIndex) => {
     const newData = [...data];
     newData[rowIndex][colIndex] = value;
     setData(newData);
+  };
+
+  const handleInputEditChange = (value, rowIndex, colIndex, editData) => {
+    const newData = cloneDeep(editData);
+    newData[rowIndex][colIndex] = value;
+    return newData;
   };
 
   const columns = [...Array(5)].map((_, colIndex) => ({
@@ -42,7 +53,10 @@ const Export = () => {
   const dataSource = [...Array(5)].map((_, index) => ({ key: index }));
 
   const handleSubmit = () => {
-    const newListData = [...listData, data];
+    const newListData = [...listData, data]?.map((x) => {
+      x[2][2] = ECO_VALUE;
+      return x;
+    });
     setListData(newListData);
     setData(dataDefault);
   };
@@ -85,52 +99,73 @@ const Export = () => {
     setListData(newListData);
   };
 
-  const { confirm } = Modal;
-
   const handleEdit = (index) => {
-    const editData = listData?.find((x, idx) => idx === index);
+    const listDataClone = cloneDeep(listData);
+    let editData = listDataClone?.find((x, idx) => idx === index);
     confirm({
-        icon: null,
+      icon: null,
       title: `Chỉnh sửa Bingo ${index + 1}`,
+      // footer: null,
+      // closable: true,
+      maskClosable: true,
       content: (
-        <Table
-          showHeader={false}
-          key={index}
-          dataSource={editData?.map((data, idx) => ({
-            key: idx,
-            name: data,
-          }))}
-          columns={editData.map((_, colIndex) => ({
-            dataIndex: colIndex,
-            key: colIndex,
-            render: (_, record, rowIndex) => {
-              const isMiddleCell = rowIndex === 2 && colIndex === 2;
-              if (isMiddleCell) {
+        <>
+          <Table
+            showHeader={false}
+            key={index}
+            dataSource={editData?.map((data, idx) => ({
+              key: idx,
+              name: data,
+            }))}
+            columns={editData.map((_, colIndex) => ({
+              dataIndex: colIndex,
+              key: colIndex,
+              render: (_, record, rowIndex) => {
+                const isMiddleCell = rowIndex === 2 && colIndex === 2;
+                if (isMiddleCell) {
+                  return (
+                    <span className="flex w-full bg-red-600 text-white justify-center">
+                      {ECO_VALUE}
+                    </span>
+                  );
+                }
                 return (
-                  <span className="flex w-full bg-red-600 text-white justify-center">
-                    {ECO_VALUE}
-                  </span>
+                  <Input
+                    defaultValue={editData[rowIndex][colIndex]}
+                    onChange={(e) =>
+                      (editData = handleInputEditChange(
+                        e.target.value,
+                        rowIndex,
+                        colIndex,
+                        editData
+                      ))
+                    }
+                  />
                 );
-              }
-              return (
-                <div className="flex justify-center">
-                  {editData[rowIndex][colIndex]}
-                </div>
-              );
-            },
-          }))}
-          pagination={false}
-          bordered
-          size="small"
-        />
+              },
+            }))}
+            pagination={false}
+            bordered
+            size="small"
+          />
+        </>
       ),
-      onOk() {
-        console.log("OK");
-      },
-      onCancel() {
-        console.log("Cancel");
-      },
+      onOk: () => handleSaveEdit(index, editData),
     });
+  };
+
+  const handleSaveEdit = (index, editData) => {
+    const listDataClone = cloneDeep(listData);
+    const newListData = listDataClone?.map((data, idx) => {
+      if (idx === index) {
+        editData[2][2] = ECO_VALUE;
+        return editData;
+      } else {
+        data[2][2] = ECO_VALUE;
+        return data;
+      }
+    });
+    setListData(newListData);
   };
 
   return (
@@ -189,7 +224,7 @@ const Export = () => {
         {listData?.map((ele, idx) => (
           <div key={idx}>
             <div className="flex flex-row justify-between items-center">
-              <span className="flex text-xl mb-1 grow">{`Bingo ${
+              <span className="flex text-xl mb-1 grow font-bold">{`Bingo ${
                 idx + 1
               }`}</span>
               <div className="flex flex-row items-center gap-2">

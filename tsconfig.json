@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@messages/*": [
+        "src/messages/*"
+      ],
+      "@app/*": [
+        "src/app/*"
+      ],
+      "@share/*": [
+        "src/features/share/*"
+      ],
+      "@features/*": [
+        "src/features/*"
+      ]
+    },
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "downlevelIteration": true
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+, "src/features/design/components/CommonBlockComponent/BlockCard/CardStyleDisplay/CardStyleSlide/CardPanorama/index.jsx"  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

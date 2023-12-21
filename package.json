@@ -1,0 +1,52 @@
+{
+    "private": true,
+    "scripts": {
+        "dev": "next -p 3011",
+        "build": "next build",
+        "start": "next start",
+        "type-check": "tsc",
+        "prettier": "prettier --config ./.prettierrc --write \"**/*.{js,ts,tsx,jsx}\"",
+        "prettier:check": "prettier --check --config ./.prettierrc \"**/*.{js,ts,tsx,jsx}\"",
+        "lint": "next lint"
+    },
+    "dependencies": {
+        "@reduxjs/toolkit": "^1.9.3",
+        "@sentry/nextjs": "6.19.7",
+        "antd": "^5.3.0",
+        "classnames": "2.3.1",
+        "dotenv": "16.0.1",
+        "lodash": "4.17.21",
+        "next": "13.1.6",
+        "postcss-css-variables": "0.18.0",
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
+        "react-hook-form": "7.31.1",
+        "uuid": "8.3.2"
+    },
+    "devDependencies": {
+        "@testing-library/jest-dom": "5.0.0",
+        "@testing-library/react": "12.1.0",
+        "@testing-library/user-event": "13.0.0",
+        "@types/jest": "27.0.1",
+        "@types/lodash": "4.14.182",
+        "@types/node": "18.14.1",
+        "@types/react": "18.0.28",
+        "@types/react-dom": "18.0.11",
+        "@types/uuid": "8.3.4",
+        "@typescript-eslint/eslint-plugin": "5.47.0",
+        "autoprefixer": "10.4.7",
+        "eslint": "8.30.0",
+        "eslint-config-next": "13.1.1",
+        "eslint-config-prettier": "8.5.0",
+        "lint-staged": "13.1.0",
+        "postcss": "8.4.13",
+        "prettier": "2.8.1",
+        "tailwindcss": "3.0.24",
+        "ts-jest": "27.0.5",
+        "ts-node": "10.2.1",
+        "typescript": "^5.0.2"
+    },
+    "resolutions": {
+        "@types/react": "17.0.21"
+    }
+}

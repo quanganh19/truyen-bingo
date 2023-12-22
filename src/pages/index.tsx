@@ -18,71 +18,42 @@ const InputTable = () => {
   const [valueInput, setValueInput] = useState<any>("");
 
   const handleChangeBingoNumber = (e) => {
-    setValueInput(e.target.value);
-    if (!e.target.value?.trim()) {
-      setListData(listDataDefault.current);
-      return;
+    const regex = /^[0-9,]*$/;
+    if (regex.test(e.target.value)) {
+      setValueInput(e.target.value);
+      if (!e.target.value?.trim()) {
+        setListData(listDataDefault.current);
+        return;
+      }
+      const numberBingoArr = [ECO_VALUE, ...e.target.value?.split(",")]?.map(
+        (x) => x?.trim()
+      );
+      const newListData = listDataDefault?.current?.filter((ele) => {
+        const horizontalArray = ele;
+        const verticalArray = getVerticalNumberArray(ele);
+        const diagonalArray = getDiagonalNumberArray(ele);
+        const isExistInHorizontalArray = horizontalArray?.some((x) =>
+          x?.every((y) => numberBingoArr?.includes(y))
+        );
+        const isExistInVerticalArray = verticalArray?.some((x) =>
+          x?.every((y) => numberBingoArr?.includes(y))
+        );
+        const isExistInDiagonalArrayArray = diagonalArray?.some((x) =>
+          x?.every((y) => numberBingoArr?.includes(y))
+        );
+        return !!(
+          isExistInHorizontalArray ||
+          isExistInVerticalArray ||
+          isExistInDiagonalArrayArray
+        );
+      });
+      setListData(newListData);
     }
-    const numberBingoArr = [ECO_VALUE, ...e.target.value?.split(",")]?.map(
-      (x) => x?.trim()
-    );
-    const newListData = listDataDefault?.current?.filter((ele) => {
-      const horizontalArray = ele;
-      const verticalArray = getVerticalNumberArray(ele);
-      const diagonalArray = getDiagonalNumberArray(ele);
-      const isExistInHorizontalArray = horizontalArray?.some((x) =>
-        x?.every((y) => numberBingoArr?.includes(y))
-      );
-      const isExistInVerticalArray = verticalArray?.some((x) =>
-        x?.every((y) => numberBingoArr?.includes(y))
-      );
-      const isExistInDiagonalArrayArray = diagonalArray?.some((x) =>
-        x?.every((y) => numberBingoArr?.includes(y))
-      );
-      return !!(
-        isExistInHorizontalArray ||
-        isExistInVerticalArray ||
-        isExistInDiagonalArrayArray
-      );
-    });
-    setListData(newListData);
   };
 
   const numberArr = [ECO_VALUE, ...valueInput?.split(",")]?.map((x) =>
     x?.trim()
   );
-
-  // const handleFilterBingoTable = useCallback(() => {
-  //   if (!valueInput?.trim()) {
-  //     setListData(listDataDefault.current);
-  //     return;
-  //   }
-  //   const newListData = listDataDefault?.current?.filter((ele) => {
-  //     const horizontalArray = ele;
-  //     const verticalArray = getVerticalNumberArray(ele);
-  //     const diagonalArray = getDiagonalNumberArray(ele);
-  //     const isExistInHorizontalArray = horizontalArray?.some((x) =>
-  //       x?.every((y) => numberArr?.includes(y))
-  //     );
-  //     const isExistInVerticalArray = verticalArray?.some((x) =>
-  //       x?.every((y) => numberArr?.includes(y))
-  //     );
-  //     const isExistInDiagonalArrayArray = diagonalArray?.some((x) =>
-  //       x?.every((y) => numberArr?.includes(y))
-  //     );
-  //     return !!(
-  //       isExistInHorizontalArray ||
-  //       isExistInVerticalArray ||
-  //       isExistInDiagonalArrayArray
-  //     );
-  //   });
-  //   setListData(newListData);
-  // }, [
-  //   listDataDefault.current,
-  //   numberArr,
-  //   getDiagonalNumberArray,
-  //   getVerticalNumberArray,
-  // ]);
 
   const handleFileRead = (event) => {
     const content = event.target.result;
@@ -103,7 +74,7 @@ const InputTable = () => {
     <div className="mx-4">
       <div>
         <div className="mb-1 mt-2 text-lg">
-        Bước 1: Tải file json: (Chưa có thì export tại{" "}
+          Bước 1: Tải file json: (Chưa có thì export tại{" "}
           <a className="text-blue-500 underline" href="/export">
             đây
           </a>
@@ -129,10 +100,13 @@ const InputTable = () => {
       <div className="text-sm mb-2">
         ⚠️ Lưu ý: Chỉ nhập số và mỗi số ngăn cách nhau bởi dấu ","
       </div>
-      <Input
+      <Input.TextArea
         value={valueInput}
         onChange={handleChangeBingoNumber}
         placeholder="Nhập dãy số Bingo"
+        // Đặt inputmode là "numeric" để trên di động chỉ hiển thị bàn phím số
+        inputMode="numeric"
+        // Sử dụng pattern để tối ưu hóa cho các thiết bị iOS
       />
       {/* <Button className="mb-3 mt-2" onClick={handleFilterBingoTable}>
         Tìm kiếm

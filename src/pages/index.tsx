@@ -18,33 +18,26 @@ const InputTable = () => {
   const [valueInput, setValueInput] = useState<any>("");
 
   const handleChangeBingoNumber = (e) => {
-    if (!e.target.value?.trim()) {
-      setListData(listDataDefault.current);
-    }
     setValueInput(e.target.value);
-  };
-
-  const numberArr = [ECO_VALUE, ...valueInput?.split(",")]?.map((x) =>
-    x?.trim()
-  );
-
-  const handleFilterBingoTable = useCallback(() => {
-    if (!valueInput?.trim()) {
+    if (!e.target.value?.trim()) {
       setListData(listDataDefault.current);
       return;
     }
+    const numberBingoArr = [ECO_VALUE, ...e.target.value?.split(",")]?.map(
+      (x) => x?.trim()
+    );
     const newListData = listDataDefault?.current?.filter((ele) => {
       const horizontalArray = ele;
       const verticalArray = getVerticalNumberArray(ele);
       const diagonalArray = getDiagonalNumberArray(ele);
       const isExistInHorizontalArray = horizontalArray?.some((x) =>
-        x?.every((y) => numberArr?.includes(y))
+        x?.every((y) => numberBingoArr?.includes(y))
       );
       const isExistInVerticalArray = verticalArray?.some((x) =>
-        x?.every((y) => numberArr?.includes(y))
+        x?.every((y) => numberBingoArr?.includes(y))
       );
       const isExistInDiagonalArrayArray = diagonalArray?.some((x) =>
-        x?.every((y) => numberArr?.includes(y))
+        x?.every((y) => numberBingoArr?.includes(y))
       );
       return !!(
         isExistInHorizontalArray ||
@@ -53,12 +46,43 @@ const InputTable = () => {
       );
     });
     setListData(newListData);
-  }, [
-    listDataDefault.current,
-    numberArr,
-    getDiagonalNumberArray,
-    getVerticalNumberArray,
-  ]);
+  };
+
+  const numberArr = [ECO_VALUE, ...valueInput?.split(",")]?.map((x) =>
+    x?.trim()
+  );
+
+  // const handleFilterBingoTable = useCallback(() => {
+  //   if (!valueInput?.trim()) {
+  //     setListData(listDataDefault.current);
+  //     return;
+  //   }
+  //   const newListData = listDataDefault?.current?.filter((ele) => {
+  //     const horizontalArray = ele;
+  //     const verticalArray = getVerticalNumberArray(ele);
+  //     const diagonalArray = getDiagonalNumberArray(ele);
+  //     const isExistInHorizontalArray = horizontalArray?.some((x) =>
+  //       x?.every((y) => numberArr?.includes(y))
+  //     );
+  //     const isExistInVerticalArray = verticalArray?.some((x) =>
+  //       x?.every((y) => numberArr?.includes(y))
+  //     );
+  //     const isExistInDiagonalArrayArray = diagonalArray?.some((x) =>
+  //       x?.every((y) => numberArr?.includes(y))
+  //     );
+  //     return !!(
+  //       isExistInHorizontalArray ||
+  //       isExistInVerticalArray ||
+  //       isExistInDiagonalArrayArray
+  //     );
+  //   });
+  //   setListData(newListData);
+  // }, [
+  //   listDataDefault.current,
+  //   numberArr,
+  //   getDiagonalNumberArray,
+  //   getVerticalNumberArray,
+  // ]);
 
   const handleFileRead = (event) => {
     const content = event.target.result;
@@ -96,6 +120,7 @@ const InputTable = () => {
             listDataDefault.current = null;
             setListData([]);
           }}
+          maxCount={1}
         >
           <Button>Select JSON File</Button>
         </Upload>
@@ -109,18 +134,19 @@ const InputTable = () => {
         onChange={handleChangeBingoNumber}
         placeholder="Nhập dãy số Bingo"
       />
-      <Button className="mb-3 mt-2" onClick={handleFilterBingoTable}>
+      {/* <Button className="mb-3 mt-2" onClick={handleFilterBingoTable}>
         Tìm kiếm
-      </Button>
-      <div className="flex flex-row items-center justify-between">
-        <div className="mt-2 text-lg mb-2">{`Kết quả: ${listData?.length || 0}/${
+      </Button> */}
+      <div className="flex flex-row items-center justify-between mt-5 mb-2">
+        <div className="text-lg">{`Kết quả: ${listData?.length || 0}/${
           listDataDefault?.current?.length || 0
         }`}</div>
         <Button
           className="mr-10"
           onClick={() => setListData(listDataDefault.current)}
+          type="primary"
         >
-          Reset
+          Show all
         </Button>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 items-center">

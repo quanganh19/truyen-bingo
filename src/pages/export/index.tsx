@@ -183,6 +183,7 @@ const Export = () => {
             listDataDefault.current = null;
             setListData([]);
           }}
+          maxCount={1}
         >
           <Button>Select JSON File</Button>
         </Upload>
@@ -215,6 +216,7 @@ const Export = () => {
           className="mr-10"
           onClick={() => downloadJsonFile(dataExport, valueInput)}
           disabled={listData?.length === 0}
+          type="primary"
         >
           Export
         </Button>

@@ -104,13 +104,7 @@ const InputTable = () => {
         value={valueInput}
         onChange={handleChangeBingoNumber}
         placeholder="Nhập dãy số Bingo"
-        // Đặt inputmode là "numeric" để trên di động chỉ hiển thị bàn phím số
-        inputMode="numeric"
-        // Sử dụng pattern để tối ưu hóa cho các thiết bị iOS
       />
-      {/* <Button className="mb-3 mt-2" onClick={handleFilterBingoTable}>
-        Tìm kiếm
-      </Button> */}
       <div className="flex flex-row items-center justify-between mt-5 mb-2">
         <div className="text-lg">{`Kết quả: ${listData?.length || 0}/${
           listDataDefault?.current?.length || 0

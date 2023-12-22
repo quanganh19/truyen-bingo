@@ -1,6 +1,5 @@
-import React, { useCallback, useState, useRef } from "react";
-import { Table, Input, Button, Upload } from "antd";
-import dataSample from "./dataSample.json";
+import React, { useCallback, useState, useRef, useEffect } from "react";
+import { Table, Input, Button, Upload, InputRef } from "antd";
 import {
   getDiagonalNumberArray,
   getHorizontalNumberArray,
@@ -13,14 +12,28 @@ const InputTable = () => {
   // const listDataDefault = dataSample?.data?.map((ele) =>
   //   ele?.map((x) => x?.map((y) => y?.toString()))
   // );
+  const inputRef = useRef<InputRef>(null);
   const listDataDefault = useRef(null);
   const [listData, setListData] = useState<any>([]);
   const [valueInput, setValueInput] = useState<any>("");
+
+  useEffect(() => {
+    const jsonData = localStorage.getItem("json_data");
+    const valueInput = localStorage.getItem("value_input");
+    if (jsonData) {
+      setListData(JSON.parse(jsonData));
+      listDataDefault.current = JSON.parse(jsonData);
+    }
+    if (valueInput) {
+      setValueInput(valueInput);
+    }
+  }, []);
 
   const handleChangeBingoNumber = (e) => {
     const regex = /^[0-9,]*$/;
     if (regex.test(e.target.value)) {
       setValueInput(e.target.value);
+      localStorage.setItem("value_input", e.target.value?.trim());
       if (!e.target.value?.trim()) {
         setListData(listDataDefault.current);
         return;
@@ -61,6 +74,7 @@ const InputTable = () => {
       const jsonData = JSON.parse(content);
       listDataDefault.current = jsonData?.data;
       setListData(jsonData?.data);
+      localStorage.setItem("json_data", JSON.stringify(jsonData?.data));
     } catch (e) {}
   };
 
@@ -83,15 +97,19 @@ const InputTable = () => {
         <Upload
           beforeUpload={(file) => {
             handleFileChosen(file);
-            // Ngăn chặn việc upload tự động
             return false;
           }}
           accept=".json"
           onRemove={() => {
             listDataDefault.current = null;
             setListData([]);
+            const jsonData = localStorage.getItem("json_data");
+            if (jsonData) {
+              localStorage.removeItem("json_data");
+            }
           }}
           maxCount={1}
+          defaultFileList={[]}
         >
           <Button>Select JSON File</Button>
         </Upload>
@@ -101,9 +119,16 @@ const InputTable = () => {
         ⚠️ Lưu ý: Chỉ nhập số và mỗi số ngăn cách nhau bởi dấu ","
       </div>
       <Input.TextArea
+        ref={inputRef}
         value={valueInput}
         onChange={handleChangeBingoNumber}
         placeholder="Nhập dãy số Bingo"
+        onFocus={() => {
+          inputRef.current!.focus({
+            cursor: "end",
+          });
+        }}
+        autoSize={true}
       />
       <div className="flex flex-row items-center justify-between mt-5 mb-2">
         <div className="text-lg">{`Kết quả: ${listData?.length || 0}/${

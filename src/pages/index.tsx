@@ -102,8 +102,8 @@ const InputTable = () => {
   return (
     <div className="mx-4">
       <div>
-        <div className="mb-1 mt-2">
-          Tải file json: (Chưa có thì export tại{" "}
+        <div className="mb-1 mt-2 text-lg">
+        Bước 1: Tải file json: (Chưa có thì export tại{" "}
           <a className="text-blue-500 underline" href="/export">
             đây
           </a>
@@ -125,7 +125,7 @@ const InputTable = () => {
           <Button>Select JSON File</Button>
         </Upload>
       </div>
-      <div className="mt-4 text-lg">Vui lòng nhập dãy số Bingo:</div>
+      <div className="mt-4 text-lg">Bước 2: Vui lòng nhập dãy số Bingo</div>
       <div className="text-sm mb-2">
         ⚠️ Lưu ý: Chỉ nhập số và mỗi số ngăn cách nhau bởi dấu ","
       </div>
